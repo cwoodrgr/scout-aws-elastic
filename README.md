@@ -38,3 +38,103 @@ SCOUT_AWS_ELASTIC_ACCESS_SECRET=<your_secret_aws_key>
 ```
 ## Usage
 Because this package is a wrapper for babenkoivan/scout-elasticsearch-driver, all usage documentation can be found [here](https://github.com/babenkoivan/scout-elasticsearch-driver/blob/master/README.md) 
+
+## RuleBuilder
+The RuleBuilder class can be extended to provide dynamic bool query array generation.
+
+This can be used in conjunction with the `rule()` function provided by the ScoutElastic package.
+
+### Available Methods:
+* `public function build(array $rules)` - Creates the rule array based on the associative array passed.
+* `protected function must(string $field, $value, array $attributes)` - Creates a must match query clause.
+* `protected funciton mustNot(string $field, $value, array $attributes)` - Creates a must_not match query clause.
+* `protected function should(string $field, $value, array $attributes)` - Creates a should match query clause.
+* `protected function filter(string $field, $value, array $attributes)` - Creates a filter term query clause.
+* `protected funciton range(string $field, array $values, string type)` - Creates a range query clause.
+
+### Example
+#### IndexConfigurator:
+```php
+<?php
+
+namespace App;
+
+use ScoutElastic\Migratable;
+use ScoutElastic\IndexConfigurator;
+
+class MyModelIndexConfigurator extends IndexConfigurator
+{
+    use Migratable;
+    
+    protected $settings = [];
+}
+```
+
+#### Model:
+```php
+<?php
+
+namespace App;
+
+use ScoutElastic\Searchable;
+use Illuminate\Database\Eloquent\Model;
+
+class MyModel extends Model
+{
+    use Searchable;
+    
+    protected $fillable = [
+       'searchField',
+       'filterableField'
+    ];
+    
+    protected $indexConfigurator = MyModelIndexConfigurator::class;
+}
+```
+
+#### Rule:
+```php
+<?php
+
+namespace App;
+
+class MyRule extends Ruger\ScoutAwsElastic\Builders\RuleBuilder
+{
+    public function query(string $query): void
+    {
+        $this->must('query', $query, ['fuzziness' => 'AUTO', 'prefix_length' => 2]);
+    }
+    
+    public function someFilter(string $filter): void
+    {
+        $this->filter('someFilter', $filter);
+    }
+}
+```
+
+#### Controller:
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use App\MyModel;
+use Facades\App\MyRule;
+use Illuminate\Http\Request;
+
+class MyController extends Controler
+{
+    public function search(Request $request)
+    {
+        $validated = $request->validate([
+            'query'      => 'required|string',
+            'someFilter' => 'nullable|boolean',
+        ]);
+        
+        // Search with a custom filter
+        return MyModel::search('')->rule(function() use ($validated) {
+            MyRule::build($validated);
+        })->get();
+    }
+}
+```
