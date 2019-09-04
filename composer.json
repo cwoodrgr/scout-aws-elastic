@@ -21,7 +21,7 @@
         "laravel/framework": "^5.7",
         "laravel/scout": "^7.1",
         "aws/aws-sdk-php": "^3.97",
-        "babenkoivan/scout-elasticsearch-driver": "^3.10"
+        "babenkoivan/scout-elasticsearch-driver": "^4.0.0"
     },
     "autoload": {
         "psr-4": {
