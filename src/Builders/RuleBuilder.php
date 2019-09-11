@@ -14,6 +14,11 @@ abstract class RuleBuilder
     /**
      * @var array
      */
+    protected $multiMatches = [];
+    
+    /**
+     * @var array
+     */
     protected $musts = [];
     
     /**
@@ -61,6 +66,10 @@ abstract class RuleBuilder
             $this->rule['must'] = $this->generate($this->musts, 'match');
         }
         
+        if (!empty($this->multiMatches)) {
+            $this->rule['must'] = $this->generate($this->multiMatches, 'multi_match');
+        }
+        
         if (!empty($this->mustNots)) {
             $this->rule['must_not'] = $this->generate($this->mustNots, 'match');
         }
@@ -102,6 +111,13 @@ abstract class RuleBuilder
                 $array[$type] = [
                     $field => $values,
                 ];
+            } else if ($type === 'multi_match') {
+                $array[] = [
+                    $type => [
+                        'query'  => $rule['value'],
+                        'fields' => $rule['fields'],
+                    ],
+                ];
             } else if (array_key_exists('attributes', $rule) && !empty($rule['attributes'])) {
                 if ($type === 'match') {
                     $rule['attributes']['query'] = $rule['value'];
@@ -117,6 +133,7 @@ abstract class RuleBuilder
                         $field => $rule['value'],
                     ],
                 ];
+                
             }
         });
         
@@ -152,6 +169,18 @@ abstract class RuleBuilder
         $this->mustNots[$field] = [
             'value'      => $value,
             'attributes' => $attributes,
+        ];
+    }
+    
+    /**
+     * @param array $fields
+     * @param $value
+     */
+    protected function multi_match(array $fields, $value): void
+    {
+        $this->multiMatches[] = [
+            'value'  => $value,
+            'fields' => $fields,
         ];
     }
     
