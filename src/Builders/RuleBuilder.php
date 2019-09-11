@@ -112,12 +112,15 @@ abstract class RuleBuilder
                     $field => $values,
                 ];
             } else if ($type === 'multi_match') {
-                $array[] = [
-                    $type => [
-                        'query'  => $rule['value'],
-                        'fields' => $rule['fields'],
-                    ],
+                $a = [
+                    'query'  => $rule['value'],
+                    'fields' => $rule['fields'],
                 ];
+                
+                if (array_key_exists('attributes', $rule) && !empty($rule['attributes'])) {
+                    $a = array_merge($a, $rule['attributes']);
+                }
+                $array[] = $a;
             } else if (array_key_exists('attributes', $rule) && !empty($rule['attributes'])) {
                 if ($type === 'match') {
                     $rule['attributes']['query'] = $rule['value'];
@@ -175,12 +178,14 @@ abstract class RuleBuilder
     /**
      * @param array $fields
      * @param $value
+     * @param array $attributes
      */
-    protected function multi_match(array $fields, $value): void
+    protected function multi_match(array $fields, $value, array $attributes = []): void
     {
         $this->multiMatches[] = [
-            'value'  => $value,
-            'fields' => $fields,
+            'value'      => $value,
+            'fields'     => $fields,
+            'attributes' => $attributes,
         ];
     }
     
