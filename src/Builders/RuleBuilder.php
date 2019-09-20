@@ -124,17 +124,13 @@ abstract class RuleBuilder
             } else if (array_key_exists('attributes', $rule) && !empty($rule['attributes'])) {
                 if ($type === 'match') {
                     $rule['attributes']['query'] = $rule['value'];
-                    $array[] = [
-                        $type => [
-                            $field => $rule['attributes'],
-                        ],
+                    $array[$type] = [
+                        $field => $rule['attributes'],
                     ];
                 }
             } else {
-                $array[] = [
-                    $type => [
-                        $field => $rule['value'],
-                    ],
+                $array[$type] = [
+                    $field => $rule['value'],
                 ];
                 
             }
