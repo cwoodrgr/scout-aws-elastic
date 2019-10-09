@@ -120,7 +120,10 @@ abstract class RuleBuilder
                 if (array_key_exists('attributes', $rule) && !empty($rule['attributes'])) {
                     $a = array_merge($a, $rule['attributes']);
                 }
-                $array[$type] = $a;
+                
+                $array[] = [
+                    $type => $a,
+                ];
             } else if (array_key_exists('attributes', $rule) && !empty($rule['attributes'])) {
                 if ($type === 'match') {
                     $rule['attributes']['query'] = $rule['value'];
