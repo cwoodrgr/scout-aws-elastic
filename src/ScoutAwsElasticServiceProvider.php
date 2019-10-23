@@ -46,7 +46,7 @@ class ScoutAwsElasticServiceProvider extends ScoutElasticServiceProvider
      */
     public function register()
     {
-        if (env('SCOUT_AWS_ELASTIC_ENABLED') === true) {
+        if (config('scout_elastic_aws.aws_enabled') === true) {
             $this->awsConnection();
         } else {
             $this->standardConnection();

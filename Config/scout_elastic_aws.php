@@ -7,6 +7,10 @@
 
 return [
     /**
+     * This allows passing aws credentials.
+     */
+    'aws_enabled' => env('SCOUT_AWS_ELASTIC_ENABLED', true),
+    /**
      * You can specify one of several different connections when building an
      * Elasticsearch client.
      *
