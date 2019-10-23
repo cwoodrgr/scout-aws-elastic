@@ -9,6 +9,13 @@ The package has been tested with the following configuration:
 * Laravel Framework version &gt;= 5.7
 * Elasticsearch version &gt;= 6
 
+## Upgrading
+Version 1.2.4 requires the `scout_elastic_aws` config file to be re-published or add `aws_enabled` key.
+
+```php
+'aws_enabled' => env('SCOUT_AWS_ELASTIC_ENABLED', true)
+```
+
 ## Installation
 Use composer to install package
 ```sh
