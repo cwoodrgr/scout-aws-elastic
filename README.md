@@ -5,15 +5,15 @@ This package is a wrapper around [babenkoivan/scout-elasticsearch-driver](https:
 ## Requirements
 The package has been tested with the following configuration:
 
-* PHP version &gt;= 7.2.13
-* Laravel Framework version &gt;= 5.7
-* Elasticsearch version &gt;= 6
+* PHP version 7.3.*
+* Laravel Framework version 6.11
+* Elasticsearch version 7.1
 
 ## Upgrading
-Version 1.2.4 requires the `scout_elastic_aws` config file to be re-published or add `aws_enabled` key.
+If you are upgrading from before version 1.2.4, version 2.0.0 requires the `scout_elastic_aws` config file to be re-published or add `aws_enabled` key.
 
 ```php
-'aws_enabled' => env('SCOUT_AWS_ELASTIC_ENABLED', true)
+'aws_enabled' => env('SCOUT_AWS_ELASTIC_ENABLED', true);
 ```
 
 ## Installation
