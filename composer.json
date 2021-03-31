@@ -17,10 +17,10 @@
         }
     ],
     "require": {
-        "php": "^7.3",
+        "php": "^7.4|^8.0",
         "laravel/scout": "^7.0|^8.0",
         "aws/aws-sdk-php": "^3.0",
-        "babenkoivan/scout-elasticsearch-driver": "^4.2"
+        "babenkoivan/scout-elasticsearch-driver": "^4.3"
     },
     "autoload": {
         "psr-4": {
